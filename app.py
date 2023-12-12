@@ -63,4 +63,4 @@ def data():
     return render_template('artists.html', artists=artists, songs=songs)
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0")
+    app.run()
