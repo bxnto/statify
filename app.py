@@ -56,8 +56,11 @@ def data():
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
     sp = spotipy.Spotify(auth_manager=auth_manager)
-    artistsResults = sp.current_user_top_artists(limit=artistLimit, time_range=artistRange)
-    songResults = sp.current_user_top_tracks(limit=songLimit, time_range=songRange)
+    try:
+        artistsResults = sp.current_user_top_artists(limit=artistLimit, time_range=artistRange)
+        songResults = sp.current_user_top_tracks(limit=songLimit, time_range=songRange)
+    except:
+        return "<h2>Unable to access the data, are you whitelisted?</h2>"
     artists = []
     songs = []
 
