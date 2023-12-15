@@ -60,7 +60,7 @@ def data():
         artistsResults = sp.current_user_top_artists(limit=artistLimit, time_range=artistRange)
         songResults = sp.current_user_top_tracks(limit=songLimit, time_range=songRange)
     except:
-        return "<h2>Unable to access the data, are you whitelisted?</h2>"
+        return "<h2>Unable to access the data, are you whitelisted?</h2><br><a href='/sign_out'>Sign Out</a>"
     artists = []
     songs = []
 
@@ -84,4 +84,4 @@ def data():
     return render_template('artists.html', artists=artists, songs=songs)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True)
