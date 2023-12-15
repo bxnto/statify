@@ -1,11 +1,16 @@
-import spotipy, os
+import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, render_template, redirect, url_for, session, request
+from flask_session import Session
+import os
 
 scope = "user-library-read user-top-read"
 
 app = Flask(__name__)
-app.secret_key = "Ilov3TayTay"  # Change this to a random secret key
+app.config['SECRET_KEY'] = os.urandom(64)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './.flask_session/'
+Session(app)
 
 SPOTIPY_CLIENT_ID = os.environ.get('SPOTIPY_CLIENT_ID')
 SPOTIPY_CLIENT_SECRET = os.environ.get('SPOTIPY_CLIENT_SECRET')
@@ -13,23 +18,32 @@ SPOTIPY_REDIRECT_URI = os.environ.get('SPOTIPY_REDIRECT_URI')
 
 print(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI)
 
-def get_spotify_object():
-    return spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
-                                                     client_secret=SPOTIPY_CLIENT_SECRET,
-                                                     redirect_uri=SPOTIPY_REDIRECT_URI,
-                                                     scope=scope,
-                                                     show_dialog=True))
-
 @app.route('/')
 def index():
-    return render_template('index.html')
+    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(
+        scope='user-top-read user-library-read',
+        cache_handler=cache_handler,
+        show_dialog=True
+    )
 
-@app.route("/login")
-def login():
-    sp = get_spotify_object()
-    session['token_info'] = sp.auth_manager.get_cached_token()
-    print(sp.auth_manager.get_cached_token())
+    if request.args.get("code"):
+        # Step 2. Being redirected from Spotify auth page
+        auth_manager.get_access_token(request.args.get("code"))
+        return redirect(url_for('data'))
+
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        # Step 1. Display sign-in link when no token
+        auth_url = auth_manager.get_authorize_url()
+        return f'<h2><a href="{auth_url}">Sign in</a></h2>'
+
+    # Step 3. Signed in, display data
     return redirect(url_for('data'))
+
+@app.route('/sign_out')
+def sign_out():
+    session.pop("token_info", None)
+    return redirect('/')
 
 @app.route('/data')
 def data():
@@ -37,7 +51,11 @@ def data():
     artistLimit = int(request.args.get('artistAmount', 10))
     songRange = request.args.get('songDuration', 'medium_term')
     songLimit = int(request.args.get('songAmount', 10))
-    sp = spotipy.Spotify(auth=session['token_info']['access_token'])
+
+    # Use the token from the session for Spotify API requests
+    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    sp = spotipy.Spotify(auth_manager=auth_manager)
     artistsResults = sp.current_user_top_artists(limit=artistLimit, time_range=artistRange)
     songResults = sp.current_user_top_tracks(limit=songLimit, time_range=songRange)
     artists = []
@@ -63,4 +81,4 @@ def data():
     return render_template('artists.html', artists=artists, songs=songs)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, port=5001)

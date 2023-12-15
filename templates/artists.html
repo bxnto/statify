@@ -29,7 +29,8 @@
         <br>
         <button type="submit">Update</button>
     </form>
-    
+    <a href="{{url_for('sign_out')}}">Sign Out</a>
+
     <div id="artists">
     <h1>Top Artists</h1>
     {% if artists %}
@@ -77,7 +78,7 @@
 
 
         $(document).ready(function() {
-            
+
             var urlParams = new URLSearchParams(window.location.search);
 
             // Set the current values as placeholders in the form fields
