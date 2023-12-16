@@ -12,7 +12,6 @@ body {
 
 .left-side,
 .right-side {
-    flex: 1;
     overflow: auto;
 }
 
@@ -21,10 +20,11 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin-right: 10px; /* Adjust margin as needed */
+    width: 35%; /* Adjust the width as needed */
 }
 
 .right-side {
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
