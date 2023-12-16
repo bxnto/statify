@@ -80,8 +80,7 @@ a {
 
 #artists ol,
 #songs ol {
-    list-style: none;
-    padding: 0;
+    padding: 20px;
     margin: 0;
 }
 
