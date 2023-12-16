@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Artists</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+    <title>Harmonify - Spotify Stats</title>
 </head>
 <body>
-    <a href="{{url_for('login')}}">Log in With Spotify</a>
+    <div id="content">
+    <h1>Welcome to Harmonify!</h1>
+    <a href="{{auth_url}}" class="login-button"><img width="30px" class="logo" src="{{url_for('static', filename='spotifyicon.png')}}">Log in With Spotify</a>
+    </div>
 </body>
 </html>

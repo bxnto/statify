@@ -1,3 +1,128 @@
-div {
-    display:inline-table;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.left-side,
+.right-side {
+    flex: 1;
+    overflow: auto;
+}
+
+.left-side {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 10px; /* Adjust margin as needed */
+}
+
+.right-side {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+}
+
+form input,
+form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+form button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+a {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #3498db;
+}
+
+#artists,
+#songs {
+    flex: 1;
+    padding: 20px;
+}
+
+#artists h1,
+#songs h1 {
+    margin-bottom: 10px;
+}
+
+#artists ol,
+#songs ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#artists li,
+#songs li {
+    margin-bottom: 20px;
+}
+
+#artists img,
+#songs img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+
+#content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: rgb(54, 54, 54);
+    color: rgb(255, 255, 255);
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 290486px;
+}
+
+.logo {
+    width: 30px;
+    margin-right: 10px;
 }
