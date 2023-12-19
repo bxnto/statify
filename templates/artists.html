@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=.9">
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -20,7 +21,7 @@
             
             <div class="form-group">
                 <label for="artistAmount">Artist Limit (Up to 50): </label>
-                <input type="number" id="artistAmount" name="artistAmount">
+                <input type="number" id="artistAmount" name="artistAmount" placeholder="0">
             </div>
             
             <div class="form-group">
@@ -34,7 +35,7 @@
             
             <div class="form-group">
                 <label for="songAmount">Song Limit (Up to 50): </label>
-                <input type="number" id="songAmount" name="songAmount">
+                <input type="number" id="songAmount" name="songAmount" placeholder="0">
             </div>
             
             <button type="submit">Update</button>
@@ -43,7 +44,11 @@
         </div>
 
         <div class="right-side">
-            <div id="artists">
+            <div class="tabs">
+                <div class="tab" id="artistTab" onclick="openTab('artists')" style="background-color: rgb(212, 212, 212);">Artists</div>
+                <div class="tab" id="songTab" onclick="openTab('songs')" style="background-color: rgb(212, 212, 212);">Songs</div>
+            </div>
+            <div id="artists" style="display: none;">
 
                 <h1>Top Artists</h1>
                 {% if artists %}
@@ -64,7 +69,7 @@
                 {% endif %}
             </div>
 
-            <div id="songs">
+            <div id="songs" style="display: none;">
                 <h1>Top Songs</h1>
                 {% if songs %}
                     <ol>
@@ -87,18 +92,7 @@
     </div>
 
     <script>
-        var defaultUrl = `{{ url_for('data') }}?artistRange=medium_term&artistLimit=10&songRange=medium_term&songLimit=10`;
-        history.replaceState({}, document.title, defaultUrl)
-
         $(document).ready(function() {
-            var urlParams = new URLSearchParams(window.location.search);
-
-            // Set the current values as placeholders in the form fields
-            $("#artistRange").val(urlParams.get("artistRange") || 'medium_term');
-            $("#artistAmount").attr("placeholder", urlParams.get("artistLimit") || '10');
-            $("#songRange").val(urlParams.get("songRange") || 'medium_term');
-            $("#songAmount").attr("placeholder", urlParams.get("songLimit") || '10');
-
             $("#parameters").submit(function(event) {
                 event.preventDefault();
                 var artistRange = $("#artistRange").val() || 'medium_term';
@@ -111,8 +105,33 @@
 
                 // Navigate to the constructed URL
                 window.location.href = url;
+
             });
         });
+
+        var urlParams = new URLSearchParams(window.location.search);
+        // Set the current values as placeholders in the form fields
+        $("#artistRange").val(urlParams.get("artistRange") || 'medium_term');
+        $("#artistAmount").attr("placeholder", urlParams.get("artistLimit") || '10');
+        $("#songRange").val(urlParams.get("songRange") || 'medium_term');
+        $("#songAmount").attr("placeholder", urlParams.get("songLimit") || '10');
+
+        function openTab(tabName) {
+            if (tabName == "artists") {
+                document.getElementById('artists').style.display = 'block';
+                document.getElementById('songs').style.display = 'none';
+                document.getElementById('songTab').style.backgroundColor = 'rgb(212,212,212)';
+                document.getElementById('artistTab').style.backgroundColor = '#3498db';
+            }
+            if (tabName == 'songs') {
+                document.getElementById('songs').style.display = 'block';
+                document.getElementById('artists').style.display = 'none';
+                document.getElementById('songTab').style.backgroundColor = '#3498db';
+                document.getElementById('artistTab').style.backgroundColor = 'rgb(212,212,212)';
+            }
+            
+        }
+
     </script>
 </body>
 </html>

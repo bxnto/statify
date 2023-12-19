@@ -47,10 +47,10 @@ def sign_out():
 
 @app.route('/data')
 def data():
-    artistRange = request.args.get('artistDuration', 'medium_term')
-    artistLimit = int(request.args.get('artistAmount', 10))
-    songRange = request.args.get('songDuration', 'medium_term')
-    songLimit = int(request.args.get('songAmount', 10))
+    artistRange = request.args.get('artistRange', 'medium_term')
+    artistLimit = int(request.args.get('artistLimit', 10))
+    songRange = request.args.get('songRange', 'medium_term')
+    songLimit = int(request.args.get('songLimit', 10))
 
     # Use the token from the session for Spotify API requests
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
