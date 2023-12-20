@@ -73,11 +73,12 @@ def data():
 
     for artist in artistsResults['items']:
         name = artist['name']
+        artistLink = artist['external_urls']['spotify']
         if artist['images']:
             image_url = artist['images'][0]['url']
         else:
             image_url = None
-        artists.append({'name': name, 'image_url': image_url})
+        artists.append({'name': name, 'image_url': image_url, 'link': artistLink})
 
     for song in songResults['items']:
         songName = song['name']
