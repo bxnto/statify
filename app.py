@@ -22,7 +22,7 @@ print(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI)
 def index():
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
-        scope='user-top-read user-library-read',
+        scope='user-top-read user-library-read user-read-private user-read-email',
         cache_handler=cache_handler,
         show_dialog=True
     )
@@ -59,12 +59,17 @@ def data():
     try:
         artistsResults = sp.current_user_top_artists(limit=artistLimit, time_range=artistRange)
         songResults = sp.current_user_top_tracks(limit=songLimit, time_range=songRange)
+        userInfoResults = sp.current_user()
     except:
         return "<h2>Unable to access the data, are you whitelisted?</h2><br><a href='/sign_out'>Sign Out</a>"
     artists = []
     songs = []
+    
+    userName = userInfoResults['display_name']
+    userPic = userInfoResults['images'][0]['url']
+    profileURL = userInfoResults['external_urls']['spotify']
 
-    print(f"Artist Range: {artistRange}, Artist Limit: {artistLimit}, Song Range: {songRange}, Song Limit: {songLimit}")
+    print(userName, userPic, profileURL)
 
     for artist in artistsResults['items']:
         name = artist['name']
@@ -80,8 +85,9 @@ def data():
         songLink = song['external_urls']['spotify']
         cover = song['album']['images'][1]['url']
         songs.append({'name': songName, 'artist': songArtist, 'link': songLink, 'cover': cover})
+    
 
-    return render_template('artists.html', artists=artists, songs=songs)
+    return render_template('artists.html', artists=artists, songs=songs, uName = userName, uPic = userPic, url = profileURL)
 
 if __name__ == '__main__':
     app.run(debug=True)

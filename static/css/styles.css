@@ -5,7 +5,37 @@ body {
     padding: 0;
 }
 
+#profile {
+    display: table-cell;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
+#name {
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  #name h4 {
+    margin: 0; /* Remove default margin for h4 element */
+  }
+
+  #name h6 {
+    margin-top: 0; /* Push the sign-out link to the bottom of the container */
+  }
+
+  /* Center the sign-out link horizontally */
+  #name h6 a {
+    display: flex;
+    align-items: center;
+  }
+
+  #profile img {
+    border-radius: 5000px;
+    max-width: 100px;
+    margin-bottom: 10px;
+}
 
 .tab {
     float: left;

@@ -9,6 +9,13 @@
 <body>
     <div class="container">
         <div class="left-side">
+            <div id="profile">
+                <a href="{{url}}"><img src="{{uPic}}" id='profileImage' alt="User Profile Picture"></a>
+                    <div id="name">
+                        <h4>Welcome, {{uName}}!</h4>
+                        <h6><a href="{{url_for('sign_out')}}">Sign Out</a></h6>
+                    </div>
+            </div>
         <form id='parameters' method="GET" action="{{ url_for('data', artistRange='', artistLimit='', songRange='', songLimit='') }}">
             <div class="form-group">
                 <label for="artistDuration">Artists Duration</label>
@@ -40,7 +47,6 @@
             
             <button type="submit">Update</button>
         </form>
-        <a href="{{url_for('sign_out')}}">Sign Out</a>
         </div>
 
         <div class="right-side">
@@ -115,6 +121,10 @@
         $("#artistAmount").attr("placeholder", urlParams.get("artistLimit") || '10');
         $("#songRange").val(urlParams.get("songRange") || 'medium_term');
         $("#songAmount").attr("placeholder", urlParams.get("songLimit") || '10');
+
+        document.getElementById('artists').style.display = 'block';
+        document.getElementById('songs').style.display = 'none';
+        document.getElementById('artistTab').style.backgroundColor = '#3498db';
 
         function openTab(tabName) {
             if (tabName == "artists") {
