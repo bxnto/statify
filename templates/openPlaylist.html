@@ -13,7 +13,7 @@
     if (!child || child.closed) {
         window.alert("Please allow pop-ups")
     }
-    setTimeout(() => window.location.href = "{{url_for('data')}}", 3000);
+    window.location.href = "{{url_for('data')}}";
 </script>
 </body>
 </html>
