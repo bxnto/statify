@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Harmonify</title>
     <meta name="viewport" content="width=device-width, initial-scale=.9">
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -16,7 +17,7 @@
                         <h6><a href="{{url_for('sign_out')}}">Sign Out</a></h6>
                     </div>
             </div>
-        <form id='parameters' method="GET" action="{{ url_for('data', artistRange='', artistLimit='', songRange='', songLimit='') }}">
+        <form id='parameters' method="GET" action="{{ url_for('data')}}">
             <div class="form-group">
                 <label for="artistDuration">Artists Duration</label>
                 <select name="artistDuration" id="artistRange">
@@ -45,8 +46,31 @@
                 <input type="number" id="songAmount" name="songAmount" placeholder="0">
             </div>
             
-            <button type="submit">Update</button>
+            <button type="submit" id="submitParameters">Update</button>
         </form>
+            
+                <button id = "playlistCreate" onclick="activateForm()">Generate Top 100 Playlist</button>
+                <div id="createPlaylist" style="display: none;">
+                    <form id="playlist" method="GET" action="{{url_for('makeTopPlaylist', time_range='')}}">
+                        <div class="choices">
+                            <input type="radio" id='short' name='time' value="short_term">
+                            <label for="short" class="form-control">Last 4 Weeks</label>
+                        </div>
+                
+                        <div class="choices">
+                            <input type="radio" id='med' name='time' value="medium_term">
+                            <label for="med" class="form-control">Last 6 Months</label>
+                        </div>
+                
+                        <div class="choices">
+                            <input type="radio" id='long' name='time' value="long_term">
+                            <label for="long" class="form-control">All Time</label>
+                        </div>
+                
+                        <button type="submit" id="playlistSubmit">Create</button>
+                    </form>
+                </div>
+                
         </div>
 
         <div class="right-side">
@@ -113,6 +137,13 @@
                 window.location.href = url;
 
             });
+
+            $('#playlist').submit(function(event) {
+                event.preventDefault();
+                var time_range = document.querySelector('input[name="time"]:checked').value;
+                var createPlistURL = "{{ url_for('makeTopPlaylist', time_range='__TIME_RANGE__') }}".replace('__TIME_RANGE__', time_range);
+                window.location.href = createPlistURL
+            })
         });
 
         var urlParams = new URLSearchParams(window.location.search);
@@ -140,6 +171,15 @@
                 document.getElementById('artistTab').style.backgroundColor = 'rgb(212,212,212)';
             }
             
+        }
+
+        function activateForm() {
+            var x = document.getElementById('createPlaylist');
+            if (x.style.display === 'none') {
+                document.getElementById('createPlaylist').style.display = 'block'
+            } else {
+                document.getElementById('createPlaylist').style.display = 'none'
+            }
         }
 
     </script>
