@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+
 <body>
     <div class="container">
         <div class="left-side">
@@ -20,12 +21,17 @@
         <form id='parameters' method="GET" action="{{ url_for('data')}}">
             <div class="form-group">
                 <label for="artistDuration">Artists Duration</label>
-                <select name="artistDuration" id="artistRange">
-                    <option value="short_term">Last 4 Weeks</option>
-                    <option value="medium_term">Last 6 Months</option>
-                    <option value="long_term">All Time</option>
-                </select>
-            </div>
+                <div class="ad-container">
+                    <input class='ad-options' type="radio" name="artistDuration" id="ad-shortTerm" value="short_term">
+                    <label for="ad-shortTerm" class="radio-option">Last 4 Weeks</label>
+            
+                    <input class='ad-options' type="radio" name="artistDuration" id="ad-mediumTerm" value="medium_term" checked>
+                    <label for="ad-mediumTerm" class="radio-option">Last 6 Months</label>
+            
+                    <input class='ad-options' type="radio" name="artistDuration" id="ad-longTerm" value="long_term">
+                    <label for="ad-longTerm" class="radio-option">All Time</label>
+                </div>
+            </div>            
             
             <div class="form-group">
                 <label for="artistAmount">Artist Limit (Up to 50): </label>
@@ -34,12 +40,17 @@
             
             <div class="form-group">
                 <label for="songDuration">Song Duration</label>
-                <select name="songDuration" id="songRange">
-                    <option value="short_term">Last 4 Weeks</option>
-                    <option value="medium_term">Last 6 Months</option>
-                    <option value="long_term">All Time</option>
-                </select>
-            </div>
+                <div class="sd-container">
+                    <input class='sd-options' type="radio" name="songDuration" id="sd-shortTerm" value="short_term">
+                    <label for="sd-shortTerm" class="radio-option">Last 4 Weeks</label>
+            
+                    <input class='sd-options' type="radio" name="songDuration" id="sd-mediumTerm" value="medium_term" checked>
+                    <label for="sd-mediumTerm" class="radio-option">Last 6 Months</label>
+            
+                    <input class='sd-options' type="radio" name="songDuration" id="sd-longTerm" value="long_term">
+                    <label for="sd-longTerm" class="radio-option">All Time</label>
+                </div>
+            </div> 
             
             <div class="form-group">
                 <label for="songAmount">Song Limit (Up to 50): </label>
@@ -53,17 +64,17 @@
                 <div id="createPlaylist" style="display: none;">
                     <form id="playlist" method="GET" action="{{url_for('makeTopPlaylist', time_range='')}}">
                         <div class="choices">
-                            <input type="radio" id='short' name='time' value="short_term">
+                            <input class="playlist-options" type="radio" id='short' name='time' value="short_term">
                             <label for="short" class="form-control">Last 4 Weeks</label>
                         </div>
                 
                         <div class="choices">
-                            <input type="radio" id='med' name='time' value="medium_term">
+                            <input class="playlist-options" type="radio" id='med' name='time' value="medium_term">
                             <label for="med" class="form-control">Last 6 Months</label>
                         </div>
                 
                         <div class="choices">
-                            <input type="radio" id='long' name='time' value="long_term">
+                            <input class="playlist-options" type="radio" id='long' name='time' value="long_term">
                             <label for="long" class="form-control">All Time</label>
                         </div>
                 
@@ -73,12 +84,12 @@
                 
         </div>
 
-        <div class="right-side">
-            <div class="tabs">
+        <div class="right-side" id="right-side">
+            <div class="tabs" id="tabs">
                 <div class="tab" id="artistTab" onclick="openTab('artists')" style="background-color: rgb(212, 212, 212);">Artists</div>
                 <div class="tab" id="songTab" onclick="openTab('songs')" style="background-color: rgb(212, 212, 212);">Songs</div>
             </div>
-            <div id="artists" style="display: none;">
+            <div id="artists" class="show">
 
                 <h1>Top Artists</h1>
                 {% if artists %}
@@ -99,8 +110,9 @@
                 {% endif %}
             </div>
 
-            <div id="songs" style="display: none;">
+            <div id="songs" class="show">
                 <h1>Top Songs</h1>
+                
                 {% if songs %}
                     <ol>
                         {% for song in songs %}
@@ -125,9 +137,10 @@
         $(document).ready(function() {
             $("#parameters").submit(function(event) {
                 event.preventDefault();
-                var artistRange = $("#artistRange").val() || 'medium_term';
+                var form = document.getElementById("parameters");
+                var artistRange = form.elements['artistDuration'].value || 'medium_term';
                 var artistLimit = $("#artistAmount").val() || 10;
-                var songRange = $("#songRange").val() || 'medium_term';
+                var songRange = form.elements['songDuration'].value || 'medium_term';
                 var songLimit = $("#songAmount").val() || 10;
 
                 // Construct the URL with query parameters using template literals
@@ -147,15 +160,67 @@
         });
 
         var urlParams = new URLSearchParams(window.location.search);
-        // Set the current values as placeholders in the form fields
-        $("#artistRange").val(urlParams.get("artistRange") || 'medium_term');
+        var artistRange = urlParams.get('artistRange');
+        var songRange = urlParams.get('songRange')
+
+        if (artistRange) {
+            var adRadio = document.querySelector('.ad-container input[value="'+ artistRange +'"]');
+            if (adRadio) {
+                adRadio.checked = true
+            }
+        }
+
+        if (songRange) {
+            var sdRadio = document.querySelector('.sd-container input[value="'+ songRange +'"]');
+            if (sdRadio) {
+                sdRadio.checked = true
+            }
+        }
         $("#artistAmount").attr("placeholder", urlParams.get("artistLimit") || '10');
-        $("#songRange").val(urlParams.get("songRange") || 'medium_term');
         $("#songAmount").attr("placeholder", urlParams.get("songLimit") || '10');
 
-        document.getElementById('artists').style.display = 'block';
-        document.getElementById('songs').style.display = 'none';
-        document.getElementById('artistTab').style.backgroundColor = '#3498db';
+        var screenWidth = window.innerWidth;
+
+        $(document).ready(function () {
+            function handleResize() {
+            var screenWidth = window.innerWidth;
+            var artistsDiv = document.getElementById('artists');
+            var songsDiv = document.getElementById('songs');
+            var tabsDiv = document.getElementById('tabs');
+            var tabElements = document.getElementsByClassName('tab');
+
+            if (screenWidth > 1280) {
+                artistsDiv.style.display = 'flex';
+                songsDiv.style.display = 'flex';
+                tabsDiv.style.display = "none";
+
+                // Hide individual tab elements
+
+                // Set flex direction to row
+                artistsDiv.style.flexDirection = 'column';
+                songsDiv.style.flexDirection = 'column';
+            } else {
+                document.getElementById('songTab').style.backgroundColor = 'rgb(212,212,212)';
+                document.getElementById('artistTab').style.backgroundColor = '#3498db';
+                artistsDiv.style.display = 'block';
+                songsDiv.style.display = 'none';
+                tabsDiv.style.display = "inline-block";
+
+                // Set flex direction to column
+                artistsDiv.style.flexDirection = 'column';
+                songsDiv.style.flexDirection = 'column';
+            }
+        }
+
+        // Initial call to set the correct display
+        handleResize();
+
+        // Event listener for window resize
+        window.addEventListener('resize', function () {
+            handleResize();
+        });
+
+        });
 
         function openTab(tabName) {
             if (tabName == "artists") {
