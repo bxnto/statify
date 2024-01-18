@@ -34,8 +34,17 @@
             </div>            
             
             <div class="form-group">
-                <label for="artistAmount">Artist Limit (Up to 50): </label>
-                <input type="number" id="artistAmount" name="artistAmount" placeholder="0">
+                <label for="artistLimit">Artist Limit</label>
+                <div class="aL-container">
+                    <input class='al' type="radio" name="artistLimit" id="a10" value="10" checked>
+                    <label for="a10" class="radio-option">Top 10</label>
+            
+                    <input class='al' type="radio" name="artistLimit" id="a25" value="25">
+                    <label for="a25" class="radio-option">Top 25</label>
+            
+                    <input class='al' type="radio" name="artistLimit" id="a50" value="50">
+                    <label for="a50" class="radio-option">Top 50</label>
+                </div>
             </div>
             
             <div class="form-group">
@@ -53,8 +62,17 @@
             </div> 
             
             <div class="form-group">
-                <label for="songAmount">Song Limit (Up to 50): </label>
-                <input type="number" id="songAmount" name="songAmount" placeholder="0">
+                <label for="songLimit">Song Limit</label>
+                <div class="sL-container">
+                    <input class='sl' type="radio" name="songLimit" id="s10" value="10" checked>
+                    <label for="a10" class="radio-option">Top 10</label>
+            
+                    <input class='sl' type="radio" name="songLimit" id="s25" value="25">
+                    <label for="s25" class="radio-option">Top 25</label>
+            
+                    <input class='sl' type="radio" name="songLimit" id="s50" value="50">
+                    <label for="s50" class="radio-option">Top 50</label>
+                </div>
             </div>
             
             <button type="submit" id="submitParameters">Update</button>
@@ -81,8 +99,9 @@
                         <button type="submit" id="playlistSubmit">Create</button>
                     </form>
                 </div>
-                
+                <div class="footer">Data Provided by the <img id="footer-logo" width="16px" src="{{url_for('static', filename='spotifyicon.png')}}"> Spotify API
         </div>
+    </div>
 
         <div class="right-side" id="right-side">
             <div class="tabs" id="tabs">
@@ -139,9 +158,9 @@
                 event.preventDefault();
                 var form = document.getElementById("parameters");
                 var artistRange = form.elements['artistDuration'].value || 'medium_term';
-                var artistLimit = $("#artistAmount").val() || 10;
+                var artistLimit = form.elements['artistLimit'].value || 10;
                 var songRange = form.elements['songDuration'].value || 'medium_term';
-                var songLimit = $("#songAmount").val() || 10;
+                var songLimit = form.elements['songLimit'].value || 10;
 
                 // Construct the URL with query parameters using template literals
                 var url = `{{ url_for('data') }}?artistRange=${artistRange}&artistLimit=${artistLimit}&songRange=${songRange}&songLimit=${songLimit}`;
@@ -161,7 +180,9 @@
 
         var urlParams = new URLSearchParams(window.location.search);
         var artistRange = urlParams.get('artistRange');
-        var songRange = urlParams.get('songRange')
+        var songRange = urlParams.get('songRange');
+        var artistAmount = urlParams.get('artistLimit');
+        var songAmount = urlParams.get('songLimit');
 
         if (artistRange) {
             var adRadio = document.querySelector('.ad-container input[value="'+ artistRange +'"]');
@@ -176,9 +197,18 @@
                 sdRadio.checked = true
             }
         }
-        $("#artistAmount").attr("placeholder", urlParams.get("artistLimit") || '10');
-        $("#songAmount").attr("placeholder", urlParams.get("songLimit") || '10');
-
+        if (artistAmount) {
+            var alRadio = document.querySelector('.aL-container input[value="'+ artistAmount +'"]');
+            if (alRadio) {
+                alRadio.checked = true
+            }
+        }
+        if (songAmount) {
+            var slRadio = document.querySelector('.sL-container input[value="'+ songAmount +'"]');
+            if (slRadio) {
+                slRadio.checked = true
+            }
+        }
         var screenWidth = window.innerWidth;
 
         $(document).ready(function () {

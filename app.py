@@ -96,7 +96,6 @@ def makeTopPlaylist(time_range):
 def openURL(urlToOpen):
     return render_template('openPlaylist.html', urlToOpen = urlToOpen)
 
-    
 @app.route('/data')
 def data():
     if request.args.get('playlistURL') != None:

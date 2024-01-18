@@ -24,13 +24,17 @@ margin-bottom: 20px;
 }
 
 .ad-container,
-.sd-container {
+.sd-container, 
+.sL-container,
+.aL-container {
 display: inline-block;
 }
 
 .radio-option,
 .ad-options,
-.sd-options {
+.sd-options,
+.al,
+.sl {
 display: inline-block;
 padding: 10px;
 margin-bottom: 5px;
@@ -43,18 +47,22 @@ margin-right: 5px;
 
 .radio-option:hover,
 .ad-options:hover,
-.sd-options:hover {
+.sd-options:hover,
+.al:hover,
+.sl:hover {
 background-color: #3498db;
 color: white;
 }
 
 .ad-options,
-.sd-options {
+.sd-options, .al, .sl {
 display: none;
 }
 
 .ad-options:checked + label,
-.sd-options:checked + label {
+.sd-options:checked + label,
+.al:checked +label,
+.sl:checked + label {
 background-color: #3498db;
 color: white;
 }
@@ -176,6 +184,17 @@ height: 100vh;
 overflow: auto;
 }
 
+.footer {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 10;
+}
+#footer-logo {
+  filter: invert(100%);
+  -webkit-filter: invert(100%);
+}
+
 .left-side {
 background-color: #fff;
 border-radius: 8px;
@@ -225,9 +244,9 @@ min-height: 100vh;
 }
 #playlistCreate {
 background-color: #fff;
-color:#3498db;
+color:#1D6FA5;
 padding: 10px 15px;
-border:#3498db;
+border:#1D6FA5;
 border-style: solid;
 margin-top: 10px;
 border-radius: 4px;
@@ -236,7 +255,7 @@ font-size: 16px;
 }
 
 #submitParameters {
-background-color: #3498db;
+background-color: #1D6FA5;
 color: #fff;
 padding: 10px 15px;
 border: none;
